@@ -5,9 +5,9 @@ import luigi
 from luigi_demo.services.get_weather_data import get_weather_data
 
 
-class WeatherForecastTask(luigi.Task):
+class GetWeatherDataTask(luigi.Task):
     def output(self):
-        now = datetime.now().strftime('%Y%m%d_%H%M')
+        now = datetime.now().strftime('%Y%m%d_%H')
         return luigi.LocalTarget(f'out/weather-forecast-{now}.txt')
 
     def run(self):

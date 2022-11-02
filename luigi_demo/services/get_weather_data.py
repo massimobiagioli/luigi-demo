@@ -11,10 +11,9 @@ BASE_URL = 'https://www.google.com/search?q=weather+{}'
 
 @dataclass
 class WeatherForecast:
-    region: str
-    temp_now: str
-    day_hour: str
-    weather_now: str
+    city: str
+    province: str
+    temperature: str
     precipitation: str
     humidity: str
     wind: str
@@ -30,11 +29,11 @@ def get_weather_data(cities: List[str]) -> List[WeatherForecast]:
     for city in cities:
         html = session.get(BASE_URL.format(city))
         soup = BeautifulSoup(html.text, "html.parser")
+        region = soup.find("div", attrs={"id": "wob_loc"}).text.split(' ')
         result.append(WeatherForecast(
-            region=soup.find("div", attrs={"id": "wob_loc"}).text,
-            temp_now=soup.find("span", attrs={"id": "wob_tm"}).text,
-            day_hour=soup.find("div", attrs={"id": "wob_dts"}).text,
-            weather_now=soup.find("span", attrs={"id": "wob_dc"}).text,
+            city=region[0],
+            province=region[1],
+            temperature=soup.find("span", attrs={"id": "wob_tm"}).text,
             precipitation=soup.find("span", attrs={"id": "wob_pp"}).text,
             humidity=soup.find("span", attrs={"id": "wob_hm"}).text,
             wind=soup.find("span", attrs={"id": "wob_ws"}).text,
