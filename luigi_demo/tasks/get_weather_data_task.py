@@ -1,18 +1,20 @@
-from datetime import datetime
 import json
 from dataclasses import asdict
-import luigi
+from datetime import datetime
+
+from luigi_demo.common.base_task import BaseTask
+from luigi_demo.common.output_targets import OutputTargetsEnum
 from luigi_demo.services.get_weather_data import get_weather_data
-from luigi_demo.tasks.get_cities import GetCitiesTask
+from luigi_demo.tasks.get_cities_task import GetCitiesTask
 
 
-class GetWeatherDataTask(luigi.Task):
+class GetWeatherDataTask(BaseTask):
     def requires(self):
         return GetCitiesTask()
 
     def output(self):
         now = datetime.now().strftime('%Y%m%d_%H')
-        return luigi.LocalTarget(f'out/weather-data-{now}.txt')
+        return self.get_output(OutputTargetsEnum.local, path=f'out/weather-data-{now}.json')
 
     def run(self):
         with self.input().open('r') as f:

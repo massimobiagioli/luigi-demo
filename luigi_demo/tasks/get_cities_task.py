@@ -1,12 +1,15 @@
 import json
-import luigi
 
+from luigi_demo.common.base_task import BaseTask
+from luigi_demo.common.output_targets import OutputTargetsEnum
 from luigi_demo.services.get_cities import get_cities
 
 
-class GetCitiesTask(luigi.Task):
+class GetCitiesTask(BaseTask):
+    retry_count = 3
+
     def output(self):
-        return luigi.LocalTarget(f'out/cities.txt')
+        return self.get_output(OutputTargetsEnum.local, path="out/cities.json")
 
     def run(self):
         cities = get_cities()
