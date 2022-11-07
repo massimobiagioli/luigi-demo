@@ -15,6 +15,9 @@ class TaskResult:
     def serialize(self):
         return asdict(self)
 
+    def is_success(self):
+        return self.status == StatusEnum.SUCCESS
+
 
 def create_success_result(data: TaskResultData):
     return TaskResult(StatusEnum.SUCCESS, data)

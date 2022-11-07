@@ -10,7 +10,10 @@ class GetCitiesTask(BaseTask):
     retries = 0
 
     def output(self):
-        return self.get_output_target(OutputTargetEnum.LOCAL, path="out/cities.json")
+        return self.get_output_target(
+            target=OutputTargetEnum.LOCAL,
+            path="out/cities.json"
+        )
 
     def run(self):
         self.retries += 1
@@ -21,8 +24,14 @@ class GetCitiesTask(BaseTask):
                     task_name=self.task_family,
                 )
             )
-            self.write_output(output_data)
+            self.write_output(
+                data=output_data
+            )
 
         cities = get_cities()
-        output_data = create_success_result(cities)
-        self.write_output(output_data)
+        output_data = create_success_result(
+            data=cities
+        )
+        self.write_output(
+            data=output_data
+        )
