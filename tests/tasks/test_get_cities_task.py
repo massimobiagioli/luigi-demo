@@ -19,7 +19,7 @@ def test_get_cities_task(get_luigi):
     luigi = get_luigi()
     luigi.build([task], local_scheduler=True)
 
-    data = MockTarget.fs.get_data(task.get_debug_output_name())
+    data = MockTarget.fs.get_data(task.debug_output_name)
 
     assert expected_cities == json.loads(data)
 
@@ -59,7 +59,7 @@ def test_get_cities_task_with_retry(mocker, get_luigi):
     )
     luigi.build([task], local_scheduler=True)
 
-    data = MockTarget.fs.get_data(task.get_debug_output_name())
+    data = MockTarget.fs.get_data(task.debug_output_name)
 
     assert expected_cities == json.loads(data)
     assert get_cities_mock.call_count == 3

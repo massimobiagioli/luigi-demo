@@ -23,7 +23,7 @@ class BaseTask(luigi.Task):
 
     def get_output(self, target, **kwargs):
         if self.debug:
-            return MockTarget(self.get_debug_output_name())
+            return MockTarget(self.debug_output_name)
 
         if target == OutputTargetsEnum.local:
             return luigi.LocalTarget(**kwargs)
@@ -36,5 +36,6 @@ class BaseTask(luigi.Task):
                 self.logger.error('Could not decode input file')
                 return []
 
-    def get_debug_output_name(self):
+    @property
+    def debug_output_name(self):
         return f'out/{self.task_namespace}_{self.task_family}_{self.task_id}.json'
