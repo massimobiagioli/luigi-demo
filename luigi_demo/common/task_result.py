@@ -24,7 +24,7 @@ def create_error_result(error: TaskException):
     return TaskResult(
         StatusEnum.ERROR,
         {
-            "error": str(error),
+            "message": str(error),
             "task_name": error.task_name,
         }
     )
