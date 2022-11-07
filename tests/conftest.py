@@ -1,12 +1,10 @@
-from typing import List
-
 import luigi
 import pytest
 
 
 @pytest.fixture
 def get_luigi():
-    def _build_luigi_conf(config: List[dict] = []):
+    def _build_luigi_conf(config=None):
         """
         config is a list on configurations dictionaries in the form:
             {
@@ -15,6 +13,8 @@ def get_luigi():
                 "value":"string-value-of-the-option"
             }
         """
+        if config is None:
+            config = []
         conf = luigi.configuration.get_config()
         for cfg in config:
             conf.set(**cfg)

@@ -54,7 +54,7 @@ def test_get_cities_task_with_retry(mocker, get_luigi):
                 "section": 'scheduler',
                 "option": 'retry_delay',
                 "value": '1'
-            },
+            }
         ]
     )
     luigi.build([task], local_scheduler=True)
