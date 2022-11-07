@@ -21,3 +21,24 @@ def get_luigi():
         return luigi
 
     return _build_luigi_conf
+
+
+@pytest.fixture
+def retry_config():
+    return [
+        {
+            "section": 'worker',
+            "option": 'keep_alive',
+            "value": 'True'
+        },
+        {
+            "section": 'scheduler',
+            "option": 'retry_delay',
+            "value": '1'
+        }
+    ]
+
+
+@pytest.fixture
+def cities():
+    return ['Milano', 'Torino', 'Roma', 'Napoli', 'Palermo']

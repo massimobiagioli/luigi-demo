@@ -5,7 +5,8 @@ import uuid
 import luigi
 from luigi.mock import MockTarget
 
-from luigi_demo.common.output_targets import OutputTargetsEnum
+from luigi_demo.common.output_target_enum import OutputTargetEnum
+from luigi_demo.common.task_result import TaskResult
 
 LUIGI_LOGGER_NAME = 'luigi-interface'
 
@@ -21,20 +22,24 @@ class BaseTask(luigi.Task):
         default=str(uuid.uuid4())
     )
 
-    def get_output(self, target, **kwargs):
+    def get_output_target(self, target, **kwargs):
         if self.debug:
             return MockTarget(self.debug_output_name)
 
-        if target == OutputTargetsEnum.local:
+        if target == OutputTargetEnum.LOCAL:
             return luigi.LocalTarget(**kwargs)
 
-    def get_input(self):
+    def read_input(self):
         with self.input().open('r') as f:
             try:
                 return json.load(f)
             except json.decoder.JSONDecodeError:
                 self.logger.error('Could not decode input file')
                 return []
+
+    def write_output(self, data: TaskResult):
+        with self.output().open('w') as f:
+            f.write(f"{json.dumps(data.serialize(), indent=4)}\n")
 
     @property
     def debug_output_name(self):
