@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from typing import List, Dict
 
 from psycopg2.extras import execute_values
