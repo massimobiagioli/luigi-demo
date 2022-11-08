@@ -13,7 +13,10 @@ class GetWeatherDataTask(BaseTask):
     retries = 0
 
     def requires(self):
-        return GetCitiesTask()
+        return GetCitiesTask(
+            debug=self.debug,
+            nonce=self.nonce,
+        )
 
     def output(self):
         now = datetime.now().strftime('%Y%m%d_%H')
