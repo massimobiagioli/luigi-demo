@@ -42,3 +42,25 @@ def retry_config():
 @pytest.fixture
 def cities():
     return ['Milano', 'Torino', 'Roma', 'Napoli', 'Palermo']
+
+
+@pytest.fixture
+def weather_data():
+    return [
+        {
+            "city": "Milano",
+            "province": "MI",
+            "temperature": "17",
+            "precipitation": "1%",
+            "humidity": "46%",
+            "wind": "3 km/h"
+        },
+        {
+            "city": "Torino",
+            "province": "TO",
+            "temperature": "16",
+            "precipitation": "0%",
+            "humidity": "50%",
+            "wind": "2 km/h"
+        }
+    ]
