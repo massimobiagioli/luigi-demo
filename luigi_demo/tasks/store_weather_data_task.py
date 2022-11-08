@@ -4,33 +4,32 @@ from luigi_demo.common.base_task import BaseTask
 from luigi_demo.common.output_target_enum import OutputTargetEnum
 from luigi_demo.common.task_exception import TaskException
 from luigi_demo.common.task_result import create_success_result, create_error_result
-from luigi_demo.services.get_weather_data import get_weather_data
-from luigi_demo.tasks.get_cities_task import GetCitiesTask
+from luigi_demo.services.store_weather_data import store_weather_data
+from luigi_demo.tasks.get_weather_data_task import GetWeatherDataTask
 
 
-class GetWeatherDataTask(BaseTask):
+class StoreWeatherDataTask(BaseTask):
     retry_count = 3
     retries = 0
-    now = datetime.now()
 
     def requires(self):
-        return GetCitiesTask(
+        return GetWeatherDataTask(
             debug=self.debug,
             nonce=self.nonce,
         )
 
     def output(self):
-        formatted_date = self.now.strftime('%Y%m%d_%H')
+        now = datetime.now().strftime('%Y%m%d_%H')
         return self.get_output_target(
             target=OutputTargetEnum.LOCAL,
-            path=f'out/weather-data-{self.nonce}-{formatted_date}.json'
+            path=f'out/store-weather-data-{self.nonce}-{now}.json'
         )
 
     def run(self):
-        cities_result = self.read_input()
-        if not cities_result.is_success():
+        weather_data_result = self.read_input()
+        if not weather_data_result.is_success():
             self.write_output(
-                data=cities_result
+                data=weather_data_result
             )
             return
 
@@ -45,14 +44,9 @@ class GetWeatherDataTask(BaseTask):
             self.write_output(
                 data=output_data
             )
+            return
 
-        weather_data = get_weather_data(
-            detection_date=self.now,
-            detection_hour=self.now.hour,
-            cities=cities_result.data
-        )
+        store_weather_data(weather_data_result.data)
         self.write_output(
-            create_success_result(
-                data=weather_data
-            )
+            create_success_result()
         )

@@ -19,7 +19,7 @@ class TaskResult:
         return self.status == StatusEnum.SUCCESS
 
 
-def create_success_result(data: TaskResultData):
+def create_success_result(data: TaskResultData = None):
     return TaskResult(StatusEnum.SUCCESS, data)
 
 
