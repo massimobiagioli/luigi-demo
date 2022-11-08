@@ -12,7 +12,7 @@ class GetCitiesTask(BaseTask):
     def output(self):
         return self.get_output_target(
             target=OutputTargetEnum.LOCAL,
-            path="out/cities.json"
+            path=f"out/cities-{self.nonce}.json"
         )
 
     def run(self):

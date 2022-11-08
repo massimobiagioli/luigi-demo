@@ -22,7 +22,7 @@ class GetWeatherDataTask(BaseTask):
         now = datetime.now().strftime('%Y%m%d_%H')
         return self.get_output_target(
             target=OutputTargetEnum.LOCAL,
-            path=f'out/weather-data-{now}.json'
+            path=f'out/weather-data-{self.nonce}-{now}.json'
         )
 
     def run(self):
