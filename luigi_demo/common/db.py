@@ -1,13 +1,15 @@
 import psycopg2
 
+from luigi_demo.common import config
+
 
 def get_connection():
     return psycopg2.connect(
-        host="localhost",
-        port=5432,
-        database="weather-data",
-        user="weather-data",
-        password="weather-data"
+        host=config["DB_HOST"],
+        port=int(config["DB_PORT"]),
+        database=config["DB_NAME"],
+        user=config["DB_USER"],
+        password=config["DB_PASSWORD"]
     )
 
 

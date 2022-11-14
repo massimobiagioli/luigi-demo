@@ -8,14 +8,14 @@ down:
 
 run-local:
 ifdef nonce
-	poetry run luigi --module luigi_demo.tasks.store_weather_data_task StoreWeatherDataTask --local-scheduler --nonce $(nonce)
+	ENV=dev poetry run luigi --module luigi_demo.tasks.store_weather_data_task StoreWeatherDataTask --local-scheduler --nonce $(nonce)
 else
-	poetry run luigi --module luigi_demo.tasks.store_weather_data_task StoreWeatherDataTask --local-scheduler
+	ENV=dev poetry run luigi --module luigi_demo.tasks.store_weather_data_task StoreWeatherDataTask --local-scheduler
 endif
 
 test:
 ifdef filter
-	poetry run pytest $(filter) -vv
+	ENV=test poetry run pytest $(filter) -vv
 else
-	poetry run pytest -vv
+	ENV=test poetry run pytest -vv
 endif
