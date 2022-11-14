@@ -12,6 +12,17 @@ services:
     volumes:
       - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./data:/var/lib/postgresql/data
+  db-test:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=weather-data
+      - POSTGRES_PASSWORD=weather-data
+      - POSTGRES_DB=weather-data
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
 volumes:
   db:
     driver: local
