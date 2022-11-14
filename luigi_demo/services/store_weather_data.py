@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import Dict, List
 
 from psycopg2.extras import execute_values
 
@@ -23,13 +23,8 @@ def store_weather_data(weather_data: List[Dict[str, any]]):
         """
 
     values = [tuple(weather_data_entry.values()) for weather_data_entry in weather_data]
-    print(values)
 
-    execute_values(
-        cursor,
-        sql,
-        values
-    )
+    execute_values(cursor, sql, values)
 
     connection.commit()
     cursor.close()
