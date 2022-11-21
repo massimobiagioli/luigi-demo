@@ -8,7 +8,6 @@ from luigi_demo.tasks.get_weather_data_task import GetWeatherDataTask
 
 class StoreWeatherDataTask(BaseTask):
     retry_count = 3
-    retries = 0
 
     def requires(self):
         return GetWeatherDataTask(
