@@ -20,6 +20,7 @@ def store_weather_data(weather_data: List[Dict[str, any]]):
                 humidity,
                 wind
             ) VALUES %s
+            ON CONFLICT (detection_date, detection_hour, city) DO NOTHING
         """
 
     values = [tuple(weather_data_entry.values()) for weather_data_entry in weather_data]

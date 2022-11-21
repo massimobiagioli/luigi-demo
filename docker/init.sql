@@ -9,3 +9,5 @@ CREATE TABLE weather_forecast (
 	humidity VARCHAR ( 20 ) NOT NULL,
 	wind VARCHAR ( 20 ) NOT NULL
 );
+
+CREATE UNIQUE INDEX weather_forecast_city_detection_date_detection_hour_idx ON weather_forecast ( city, detection_date, detection_hour );
