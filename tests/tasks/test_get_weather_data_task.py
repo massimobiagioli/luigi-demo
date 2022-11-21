@@ -7,20 +7,13 @@ from luigi.mock import MockTarget
 from luigi_demo.tasks.get_weather_data_task import GetWeatherDataTask
 
 
-def test_get_weather_task(
-        get_luigi,
-        weather_data,
-        mocker
-):
+def test_get_weather_data_task(get_luigi, weather_data, mocker):
     mocker.patch(
-        'luigi_demo.tasks.get_weather_data_task.get_weather_data',
-        return_value=weather_data
+        "luigi_demo.tasks.get_weather_data_task.get_weather_data",
+        return_value=weather_data,
     )
 
-    expected_result = {
-        'status': 'success',
-        'data': weather_data
-    }
+    expected_result = {"status": "success", "data": weather_data}
 
     task = GetWeatherDataTask(debug=True, nonce=str(uuid.uuid4()))
     luigi = get_luigi()
@@ -34,32 +27,28 @@ def test_get_weather_task(
 @pytest.mark.parametrize(
     "weather_data_result, expected_result",
     [
-        ([Exception("hand made"), Exception("hand made"), 'weather_data'],
-         {
-            'status': 'success',
-            'data': 'weather_data'
-        }),
-        ([Exception("hand made"), Exception("hand made"), Exception("hand made")],
-         {
-            'status': 'error',
-            'data': {
-                'message': 'Error retrieving weather data',
-                'task_name': 'GetWeatherDataTask'
-            }
-        }),
+        (
+            [Exception("hand made"), Exception("hand made"), "weather_data"],
+            {"status": "success", "data": "weather_data"},
+        ),
+        (
+            [Exception("hand made"), Exception("hand made"), Exception("hand made")],
+            {
+                "status": "error",
+                "data": {
+                    "message": "Error retrieving weather data",
+                    "task_name": "GetWeatherDataTask",
+                },
+            },
+        ),
     ],
 )
 def test_get_weather_data_task_with_retries(
-        mocker,
-        weather_data_result,
-        expected_result,
-        get_luigi,
-        retry_config,
-        weather_data
+    mocker, weather_data_result, expected_result, get_luigi, retry_config, weather_data
 ):
     get_weather_data_mock = mocker.patch(
-        'luigi_demo.tasks.get_weather_data_task.get_weather_data',
-        side_effect=weather_data_result
+        "luigi_demo.tasks.get_weather_data_task.get_weather_data",
+        side_effect=weather_data_result,
     )
 
     task = GetWeatherDataTask(debug=True, nonce=str(uuid.uuid4()))
