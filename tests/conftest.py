@@ -44,6 +44,11 @@ def no_result():
 
 
 @pytest.fixture
+def void_result():
+    return {}
+
+
+@pytest.fixture
 def weather_data():
     return [
         WeatherForecast(
