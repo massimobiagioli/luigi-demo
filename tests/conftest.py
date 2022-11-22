@@ -39,6 +39,11 @@ def cities():
 
 
 @pytest.fixture
+def no_result():
+    return None
+
+
+@pytest.fixture
 def weather_data():
     return [
         WeatherForecast(
