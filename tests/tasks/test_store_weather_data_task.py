@@ -12,13 +12,13 @@ def test_store_weather_data_task(get_luigi, mocker):
         "luigi_demo.tasks.store_weather_data_task.store_weather_data", return_value=None
     )
 
-    expected_result = {"status": "success", "data": None}
+    expected_result = {"processed": 5}
 
     task = StoreWeatherDataTask(debug=True, nonce=str(uuid.uuid4()))
     luigi = get_luigi()
     luigi.build([task], local_scheduler=True)
 
-    task_result = MockTarget.fs.get_data(task.debug_output_name)
+    task_result = MockTarget.fs.get_data(task.output_name)
 
     assert expected_result == json.loads(task_result)
 
@@ -26,18 +26,12 @@ def test_store_weather_data_task(get_luigi, mocker):
 @pytest.mark.parametrize(
     "store_weather_data_result, expected_result",
     [
+        ([Exception("hand made"), None], {"processed": 5}),
+        ([Exception("hand made"), Exception("hand made"), None], {"processed": 5}),
         (
-            [Exception("hand made"), Exception("hand made"), None],
-            {"status": "success", "data": None},
+            [Exception("hand made"), Exception("hand made"), Exception("hand made")],
+            None,
         ),
-        # ([Exception("hand made"), Exception("hand made"), Exception("hand made")],
-        #  {
-        #     'status': 'error',
-        #     'data': {
-        #         'message': 'Error saving weather data',
-        #         'task_name': 'StoreWeatherDataTask'
-        #     }
-        # }),
     ],
 )
 def test_get_weather_data_task_with_retries(
@@ -52,7 +46,11 @@ def test_get_weather_data_task_with_retries(
     luigi = get_luigi(retry_config)
     luigi.build([task], local_scheduler=True)
 
-    task_result = MockTarget.fs.get_data(task.debug_output_name)
+    if expected_result is None:
+        with pytest.raises(Exception):
+            MockTarget.fs.get_data(task.output_name)
+    else:
+        task_result = MockTarget.fs.get_data(task.output_name)
 
-    assert expected_result == json.loads(task_result)
-    assert store_weather_data_mock.call_count == len(store_weather_data_result)
+        assert expected_result == json.loads(task_result)
+        assert store_weather_data_mock.call_count == len(store_weather_data_result)

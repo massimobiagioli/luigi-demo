@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 
 @dataclass
@@ -12,3 +12,5 @@ class WeatherForecast:
     humidity: str
     wind: str
 
+    def serialize(self):
+        return asdict(self)

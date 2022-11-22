@@ -17,8 +17,9 @@ class GetWeatherDataTask(BaseTask):
     def run(self):
         now = datetime.now()
         cities_result = self.read_input()
-        self.write_output(
-            data=get_weather_data(
-                detection_date=now, detection_hour=now.hour, cities=cities_result
-            )
+        data = get_weather_data(
+            detection_date=now, detection_hour=now.hour, cities=cities_result
         )
+        print("*****************")
+        print(data)
+        self.write_output([d.serialize() for d in data])

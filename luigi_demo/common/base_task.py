@@ -35,7 +35,7 @@ class BaseTask(luigi.Task):
         with self.input().open("r") as f:
             return json.load(f)
 
-    def write_output(self, data: TaskResultData):
+    def write_output(self, data: TaskResultData) -> None:
         with self.output().open("w") as f:
             f.write(f"{json.dumps(data, indent=4)}\n")
 

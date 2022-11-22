@@ -29,8 +29,11 @@ def test_get_cities_task(get_luigi, cities):
     ],
 )
 def test_get_cities_task_with_retries(
-    mocker, cities_result, expected_result, get_luigi, retry_config, cities
+    mocker, cities_result, expected_result, get_luigi, retry_config
 ):
+    print("************CITIES************")
+    print(expected_result)
+
     get_cities_mock = mocker.patch(
         "luigi_demo.tasks.get_cities_task.get_cities", side_effect=cities_result
     )
@@ -46,4 +49,4 @@ def test_get_cities_task_with_retries(
         task_result = MockTarget.fs.get_data(task.output_name)
 
         assert expected_result == json.loads(task_result)
-        assert get_cities_mock.call_count == len(cities_result)
+        assert get_cities_mock.call_count == len(cities_result + 1)
