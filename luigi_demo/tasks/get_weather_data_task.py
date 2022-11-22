@@ -20,6 +20,4 @@ class GetWeatherDataTask(BaseTask):
         data = get_weather_data(
             detection_date=now, detection_hour=now.hour, cities=cities_result
         )
-        print("*****************")
-        print(data)
         self.write_output([d.serialize() for d in data])

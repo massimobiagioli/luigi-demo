@@ -28,13 +28,24 @@ def test_get_weather_data_task(get_luigi, weather_data, mocker):
     "weather_data_result, expected_result",
     [
         ([Exception("hand made"), "weather_data"], "weather_data"),
-        # ([Exception("hand made"), Exception("hand made"), "weather_data"], "weather_data"),
-        # ([Exception("hand made"), Exception("hand made"), Exception("hand made")], None),
+        (
+            [Exception("hand made"), Exception("hand made"), "weather_data"],
+            "weather_data",
+        ),
+        (
+            [Exception("hand made"), Exception("hand made"), Exception("hand made")],
+            "no_result",
+        ),
     ],
 )
 def test_get_weather_data_task_with_retries(
-    mocker, weather_data_result, expected_result, get_luigi, retry_config
+    request, mocker, weather_data_result, expected_result, get_luigi, retry_config
 ):
+    expected_result = request.getfixturevalue(expected_result)
+    weather_data_result = [
+        r for r in weather_data_result if isinstance(r, Exception)
+    ] + [request.getfixturevalue(r) for r in weather_data_result if isinstance(r, str)]
+
     get_weather_data_mock = mocker.patch(
         "luigi_demo.tasks.get_weather_data_task.get_weather_data",
         side_effect=weather_data_result,
