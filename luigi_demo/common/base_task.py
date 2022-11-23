@@ -6,7 +6,6 @@ import luigi
 from luigi import Target
 from luigi.mock import MockTarget
 
-from luigi_demo.common.output_target_enum import OutputTargetEnum
 from luigi_demo.common.task_result import TaskResultData
 
 LUIGI_LOGGER_NAME = "luigi-interface"
@@ -22,9 +21,7 @@ class BaseTask(luigi.Task):
     nonce = luigi.Parameter(default=str(uuid.uuid4()))
 
     def output(self) -> Target:
-        return self.get_output_target(
-            target=OutputTargetEnum.LOCAL, path=self.output_name
-        )
+        return self.get_output_target(path=self.output_name)
 
     def get_output_target(self, **kwargs) -> Target:
         if self.debug:
@@ -41,4 +38,4 @@ class BaseTask(luigi.Task):
 
     @property
     def output_name(self):
-        return f"out/{self.task_namespace}_{self.task_family}_{self.task_id}.json"
+        return f"out/{self.task_family}_{self.task_id}.json"
