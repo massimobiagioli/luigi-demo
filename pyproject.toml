@@ -8,14 +8,14 @@ packages = [{include = "luigi_demo"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-wheel = "^0.37.1"
+wheel = "0.38.4"
 luigi = "^3.1.1"
 beautifulsoup4 = "^4.11.1"
 requests = "^2.28.1"
 pytest = "^7.2.0"
 pytest-mock = "^3.10.0"
 psycopg2-binary = "^2.9.5"
-safety = "^2.3.1"
+safety = "2.3.2"
 isort = "^5.10.1"
 black = "^22.10.0"
 bandit = "^1.7.4"
